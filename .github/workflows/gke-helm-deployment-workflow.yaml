@@ -1,10 +1,7 @@
 name: Build and Deploy to GKE
 
 on:
-  push:
-    branches:
-      - dev
-      - main
+  workflow_call:
 
 env:
   GOPRIVATE: "github.com/egocentric-systems/*"
