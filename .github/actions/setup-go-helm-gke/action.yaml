@@ -30,8 +30,7 @@ runs:
   steps:
   - name: Configuration for dev branch (default)
     run: |
-      if [[ ${{ inputs.DEPLOY_ENVIRONMENT != "production" ]]
-      then
+      if [[ ${{ inputs.DEPLOY_ENVIRONMENT != "production" ]]; then
         echo "GCP_SERVICE_ACCOUNT=${{ inputs.GCP_SERVICE_ACCOUNT_DEV }}" >> $GITHUB_ENV
         echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
         echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
