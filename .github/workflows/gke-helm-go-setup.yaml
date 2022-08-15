@@ -14,6 +14,15 @@ jobs:
     environment: develop
     steps:
 
+      - name: Configuration for dev branch (default)
+        run: |
+          echo "GCP_SERVICE_ACCOUNT=${{ secrets.GKE_EGOSYS_DEV_DEPLOYMENT_SERVICE_ACCOUNT_JSON }}" >> $GITHUB_ENV
+          echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
+          echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
+          echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
+          echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
+
+      # overwrite dev configuration, when we are on main
       # I only need to declare environment variables once at the beginning
       - name: Configuration for main branch
         if: ${{ github.ref == 'refs/heads/main' }}
@@ -21,15 +30,6 @@ jobs:
           echo "GCP_SERVICE_ACCOUNT=${{ secrets.GKE_EGOSYS_DEV_DEPLOYMENT_SERVICE_ACCOUNT_JSON }}" >> $GITHUB_ENV
           echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
           echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
-          echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
-
-      - name: Configuration for dev branch
-        if: ${{ github.ref == 'refs/heads/dev' }}
-        run: |
-          echo "GCP_SERVICE_ACCOUNT=${{ secrets.GKE_EGOSYS_DEV_DEPLOYMENT_SERVICE_ACCOUNT_JSON }}" >> $GITHUB_ENV
-          echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
-          echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
-          echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
           echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
 
       - name: Checkout
