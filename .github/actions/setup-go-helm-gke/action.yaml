@@ -1,7 +1,11 @@
 name: 'Setup ENV'
 description: 'prepare GKE and Helm and GO'
 inputs:
-  GCP_SERVICE_ACCOUNT:
+  GCP_SERVICE_ACCOUNT_DEV:
+    description: 'service account json'
+    required: true
+    default: ''
+  GCP_SERVICE_ACCOUNT_PROD:
     description: 'service account json'
     required: true
     default: ''
@@ -17,27 +21,29 @@ inputs:
     description: 'environment to deploy. default is develop'
     required: false
     default: 'develop'
+outputs:
+  file_prefix:
+    description: "file prefix to be used in actions"
+    value: ${{ steps.random-number-generator.outputs.random-number }}
 runs:
   using: "composite"
   steps:
   - name: Configuration for dev branch (default)
     run: |
-      echo "GCP_SERVICE_ACCOUNT=${{ inputs.GCP_SERVICE_ACCOUNT }}" >> $GITHUB_ENV
-      echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
-      echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
-      echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
-      echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
-    shell: bash
-
-
-  # overwrite dev configuration, when we are on main
-  # I only need to declare environment variables once at the beginning
-  - name: Configuration for main branch
-    if: ${{ inputs.DEPLOY_ENVIRONMENT == 'production' }}
-    run: |
-      echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
-      echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
-      echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
+      if [[ "${{ inputs.DEPLOY_ENVIRONMENT" != "production" ]]
+      then
+        echo "GCP_SERVICE_ACCOUNT=${{ inputs.GCP_SERVICE_ACCOUNT_DEV }}" >> $GITHUB_ENV
+        echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
+        echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
+        echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
+        echo "::set-output name=file_prefix::dev"
+      else
+        echo "GCP_SERVICE_ACCOUNT=${{ inputs.GCP_SERVICE_ACCOUNT_PROD }}" >> $GITHUB_ENV
+        echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
+        echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
+        echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
+        echo "::set-output name=file_prefix::prod"
+      fi
     shell: bash
 
   - name: Checkout
