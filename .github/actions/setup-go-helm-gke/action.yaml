@@ -24,11 +24,12 @@ inputs:
 outputs:
   file_prefix:
     description: "file prefix to be used in actions"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+    value: ${{ steps.setup-vars.outputs.file_prefix }}
 runs:
   using: "composite"
   steps:
-  - name: Configuration for dev branch (default)
+  - id: 'setup-vars'
+    name: Configuration for dev branch (default)
     run: |
       if [[ "${{ inputs.DEPLOY_ENVIRONMENT }}" != "production" ]]; then
         echo "GCP_SERVICE_ACCOUNT=${{ inputs.GCP_SERVICE_ACCOUNT_DEV }}" >> $GITHUB_ENV
