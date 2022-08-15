@@ -27,15 +27,18 @@ runs:
       echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
       echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
       echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
+    shell: bash
+
 
   # overwrite dev configuration, when we are on main
   # I only need to declare environment variables once at the beginning
   - name: Configuration for main branch
-    if: ${{ input.DEPLOY_ENVIRONMENT == 'production' }}
+    if: ${{ inputs.DEPLOY_ENVIRONMENT == 'production' }}
     run: |
       echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
       echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
       echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
+    shell: bash
 
   - name: Checkout
     uses: actions/checkout@v3
@@ -62,6 +65,7 @@ runs:
   # helper for authentication
   - run: |-
       gcloud --quiet auth configure-docker
+    shell: bash
 
   # Get the GKE credentials so we can deploy to the cluster
   - uses: google-github-actions/get-gke-credentials@v0
