@@ -38,9 +38,11 @@ runs:
       restore-keys: |
         ${{ runner.os }}-go-
 
-  - run: git config --global url."https://${{secrets.GH_BOT_TOKEN}}@github.com".insteadOf "https://github.com"
+  - run: git config --global url."https://${{inputs.GH_BOT_TOKEN}}@github.com".insteadOf "https://github.com"
+    shell: bash
 
   - run: make build
+    shell: bash
 
     # Build the Docker image
   - name: Build
@@ -49,9 +51,11 @@ runs:
         --tag "gcr.io/$PROJECT_ID/${{ env.REPO_NAME }}:$GITHUB_SHA" \
         --tag "gcr.io/$PROJECT_ID/${{ env.REPO_NAME }}:latest" \
         .
+    shell: bash
 
     # Push the Docker image to Google Container Registry
   - name: Publish
     run: |-
       docker push "gcr.io/$PROJECT_ID/${{ env.REPO_NAME }}:$GITHUB_SHA" &&  \
       docker push "gcr.io/$PROJECT_ID/${{ env.REPO_NAME }}:latest"
+    shell: bash
