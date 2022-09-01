@@ -28,6 +28,10 @@ runs:
       fi
     shell: bash
 
+  - name: Get repo name as image
+    run: echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+    shell: bash
+
   - name: cache setup
     uses: actions/cache@v3
     with:
