@@ -37,18 +37,18 @@ runs:
         echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
         echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
         echo "::set-output name=file_prefix::dev"
-      elif  [[ "${{ inputs.DEPLOY_ENVIRONMENT }}" != "production" ]]; then
-        echo "GCP_SERVICE_ACCOUNT=${{ inputs.GCP_SERVICE_ACCOUNT_DEV }}" >> $GITHUB_ENV
-        echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
-        echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
-        echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
-        echo "::set-output name=file_prefix::dev"
-      else
+      elif  [[ "${{ inputs.DEPLOY_ENVIRONMENT }}" == "production" ]]; then
         echo "GCP_SERVICE_ACCOUNT=${{ inputs.GCP_SERVICE_ACCOUNT_PROD }}" >> $GITHUB_ENV
         echo "GKE_CLUSTER=egosys-prod" >> $GITHUB_ENV
         echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
         echo "PROJECT_ID=egosys-prod" >> $GITHUB_ENV
         echo "::set-output name=file_prefix::prod"
+      else
+        echo "GCP_SERVICE_ACCOUNT=${{ inputs.GCP_SERVICE_ACCOUNT_DEV }}" >> $GITHUB_ENV
+        echo "GKE_CLUSTER=egosys-dev" >> $GITHUB_ENV
+        echo "GKE_ZONE=europe-west3" >> $GITHUB_ENV
+        echo "PROJECT_ID=egosys-dev" >> $GITHUB_ENV
+        echo "::set-output name=file_prefix::dev"
       fi
     shell: bash
 
