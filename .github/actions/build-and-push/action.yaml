@@ -9,6 +9,10 @@ inputs:
     description: 'environment to deploy. default is develop'
     required: false
     default: 'develop'
+  WITH_UNITTEST:
+    description: 'runw ith unittest'
+    required: false
+    default: 'false'
 outputs:
   file_prefix:
     description: "file prefix to be used in actions"
@@ -44,6 +48,11 @@ runs:
 
   - run: git config --global url."https://${{inputs.GH_BOT_TOKEN}}@github.com".insteadOf "https://github.com"
     shell: bash
+
+  - id: 'unittest'
+    shell: bash
+    run: make unittest
+    if: "${{ inputs.WITH_UNITTEST }} == 'true'"
 
   - run: make build
     shell: bash
