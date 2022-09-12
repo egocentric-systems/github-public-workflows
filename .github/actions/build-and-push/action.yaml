@@ -52,7 +52,7 @@ runs:
   - id: 'unittest'
     shell: bash
     run: make unittest
-    if: "${{ inputs.WITH_UNITTEST }} == 'true'"
+    if: ${{ inputs.WITH_UNITTEST == 'true' }}
 
   - run: make build
     shell: bash
